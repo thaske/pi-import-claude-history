@@ -21,10 +21,14 @@
 	},
 	"keywords": [
 		"pi",
+		"pi-package",
 		"pi-coding-agent",
 		"claude",
 		"claude-code",
 		"import",
 		"extension"
 	],
+	"pi": {
+		"extensions": ["./src"]
+	}
 }

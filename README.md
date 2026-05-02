@@ -22,19 +22,34 @@ This repo publishes a single Pi extension: **`claude-import.ts`**, which registe
 
 ## Install
 
-Copy (or symlink) the extension into Pi’s extensions directory:
+### With the Pi CLI (recommended)
+
+After you push this repo to GitHub, install globally (adds it to `~/.pi/agent/settings.json` and clones to `~/.pi/agent/git/...`):
+
+```bash
+pi install https://github.com/<you>/pi-import-claude-history
+# or: pi install git:github.com/<you>/pi-import-claude-history
+# pin a tag/commit:  pi install https://github.com/<you>/pi-import-claude-history@v1.0.0
+```
+
+Project-local install (writes `.pi/settings.json`, good for teams):
+
+```bash
+pi install https://github.com/<you>/pi-import-claude-history -l
+```
+
+Then start Pi (or run **`/reload`** in the TUI) so the package loads.
+
+### Manual copy
+
+Copy (or symlink) the extension file:
 
 ```bash
 cp src/claude-import.ts ~/.pi/agent/extensions/
-# optional: project-local instead
-# mkdir -p .pi/extensions && cp src/claude-import.ts .pi/extensions/
+# optional: project-local — mkdir -p .pi/extensions && cp src/claude-import.ts .pi/extensions/
 ```
 
-In Pi, reload extensions:
-
-```text
-/reload
-```
+In Pi: **`/reload`**
 
 ## Usage
 
