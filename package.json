@@ -1,0 +1,30 @@
+{
+	"name": "pi-import-claude-history",
+	"version": "1.0.0",
+	"description": "Pi coding agent extension: import Claude Code JSONL sessions into Pi session format",
+	"license": "MIT",
+	"private": false,
+	"type": "module",
+	"files": [
+		"src",
+		"examples",
+		"README.md",
+		"LICENSE"
+	],
+	"peerDependencies": {
+		"@mariozechner/pi-coding-agent": ">=0.7.0"
+	},
+	"peerDependenciesMeta": {
+		"@mariozechner/pi-coding-agent": {
+			"optional": true
+		}
+	},
+	"keywords": [
+		"pi",
+		"pi-coding-agent",
+		"claude",
+		"claude-code",
+		"import",
+		"extension"
+	],
+}

@@ -1,0 +1,4 @@
+{"type":"user","timestamp":"2026-05-01T12:00:00.000Z","gitBranch":"main","message":{"content":[{"type":"text","text":"Refactor the auth module to use dependency injection."}]}}
+{"type":"assistant","timestamp":"2026-05-01T12:00:05.000Z","message":{"content":[{"type":"text","text":"I'll outline a small DI boundary: extract an AuthPort interface, inject it into handlers, and keep providers in composition root."}]}}
+{"type":"user","timestamp":"2026-05-01T12:01:00.000Z","message":{"content":[{"type":"text","text":"Show a minimal TypeScript example."}]}}
+{"type":"assistant","timestamp":"2026-05-01T12:01:10.000Z","message":{"content":[{"type":"text","text":"```ts\ninterface AuthPort { verify(token: string): Promise<User>; }\n```\nYou would implement `AuthPort` with your real verifier and pass it into route constructors."}]}}
