@@ -1,5 +1,9 @@
 # pi-import-claude-history
 
+[![npm version](https://img.shields.io/npm/v/pi-import-claude-history)](https://www.npmjs.com/package/pi-import-claude-history)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
+[![GitHub](https://img.shields.io/badge/GitHub-KShivendu%2Fpi--import--claude--history-181717?logo=github)](https://github.com/KShivendu/pi-import-claude-history)
+
 <p align="center">
   <img src="demo/demo.gif" alt="Terminal demo: repo tour and install commands" width="920">
 </p>
@@ -24,18 +28,26 @@ This repo publishes a single Pi extension: **`claude-import.ts`**, which registe
 
 ### With the Pi CLI (recommended)
 
-After you push this repo to GitHub, install globally (adds it to `~/.pi/agent/settings.json` and clones to `~/.pi/agent/git/...`):
+**From npm** (adds the package to Pi settings; global by default under `~/.pi/agent/settings.json`):
 
 ```bash
-pi install https://github.com/<you>/pi-import-claude-history
-# or: pi install git:github.com/<you>/pi-import-claude-history
-# pin a tag/commit:  pi install https://github.com/<you>/pi-import-claude-history@v1.0.0
+pi install npm:pi-import-claude-history
+# pin a version:  pi install npm:pi-import-claude-history@1.0.1
+```
+
+**From GitHub** (clones to `~/.pi/agent/git/...`):
+
+```bash
+pi install https://github.com/KShivendu/pi-import-claude-history
+# or: pi install git:github.com/KShivendu/pi-import-claude-history
+# pin a tag/commit:  pi install https://github.com/KShivendu/pi-import-claude-history@v1.0.0
 ```
 
 Project-local install (writes `.pi/settings.json`, good for teams):
 
 ```bash
-pi install https://github.com/<you>/pi-import-claude-history -l
+pi install npm:pi-import-claude-history -l
+# or:  pi install https://github.com/KShivendu/pi-import-claude-history -l
 ```
 
 Then start Pi (or run **`/reload`** in the TUI) so the package loads.
