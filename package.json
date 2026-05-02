@@ -5,6 +5,14 @@
 	"license": "MIT",
 	"private": false,
 	"type": "module",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/KShivendu/pi-import-claude-history.git"
+	},
+	"homepage": "https://github.com/KShivendu/pi-import-claude-history#readme",
+	"bugs": {
+		"url": "https://github.com/KShivendu/pi-import-claude-history/issues"
+	},
 	"files": [
 		"src",
 		"examples",
