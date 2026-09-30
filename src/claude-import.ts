@@ -389,6 +389,18 @@ function toPiMessage(
 	};
 }
 
+function resolveConfigDir(envName: string, fallback: string): string {
+	const directory = process.env[envName] || fallback;
+	const expanded = directory === "~" || directory.startsWith("~/") || directory.startsWith("~\\")
+		? path.join(os.homedir(), directory.slice(1))
+		: directory;
+	return path.resolve(expanded);
+}
+
+function getClaudeProjectsDir(): string {
+	return path.join(resolveConfigDir("CLAUDE_CONFIG_DIR", path.join(os.homedir(), ".claude")), "projects");
+}
+
 function resolveClaudePath(inputArg: string): string {
 	const trimmed = inputArg.trim();
 	if (!trimmed) {
@@ -401,7 +413,7 @@ function resolveClaudePath(inputArg: string): string {
 		return resolved;
 	}
 
-	const byId = path.join(os.homedir(), ".claude", "projects");
+	const byId = getClaudeProjectsDir();
 	const projectDirs = fs.existsSync(byId) ? fs.readdirSync(byId) : [];
 	for (const projectDir of projectDirs) {
 		const candidate = path.join(byId, projectDir, `${trimmed}.jsonl`);
@@ -411,13 +423,13 @@ function resolveClaudePath(inputArg: string): string {
 }
 
 function listClaudeSessionSuggestions(prefix: string, cwd: string): Array<{ value: string; label: string }> {
-	const base = path.join(os.homedir(), ".claude", "projects");
+	const base = getClaudeProjectsDir();
 	if (!fs.existsSync(base)) return [];
 
 	const safePrefix = prefix.trim();
 	const out: Array<{ value: string; label: string; lastActiveMs: number }> = [];
 
-	// Project folder names in ~/.claude/projects are path-encoded with leading '-'.
+	// Claude project folder names are path-encoded with leading '-'.
 	const cwdKey = `-${cwd.replaceAll("\\", "/").replace(/^\/+|\/+$/g, "").replaceAll("/", "-")}`;
 
 	const projectDirs = fs.readdirSync(base).filter((d) => {
@@ -597,7 +609,8 @@ export default function claudeImportExtension(pi: ExtensionAPI) {
 				const now = new Date();
 				const sessionId = randomSessionId();
 				const cwd = process.cwd();
-				const sessionDir = path.join(os.homedir(), ".pi", "agent", "sessions", sanitizeCwd(cwd));
+				const agentDir = resolveConfigDir("PI_CODING_AGENT_DIR", path.join(os.homedir(), ".pi", "agent"));
+				const sessionDir = path.join(agentDir, "sessions", sanitizeCwd(cwd));
 				fs.mkdirSync(sessionDir, { recursive: true });
 
 				const fileName = `${isoForFilename(now)}_${sessionId}.jsonl`;

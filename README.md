@@ -14,8 +14,9 @@ This repo publishes a single Pi extension: **`claude-import.ts`**, which registe
 
 ## Features
 
-- **`/import-claude`** — reads a Claude session from disk and writes a new Pi session file under `~/.pi/agent/sessions/...`.
-- **Autocomplete** — when you type the command, Pi can suggest Claude session IDs discovered under `~/.claude/projects/**/*.jsonl`.
+- **`/import-claude`** — reads a Claude session from disk and writes a new Pi session file under your Pi config directory's `sessions/` folder.
+- **Autocomplete** — when you type the command, Pi can suggest Claude session IDs discovered under your Claude config directory's `projects/` folder.
+- **Custom config directories** — respects `PI_CODING_AGENT_DIR` and `CLAUDE_CONFIG_DIR`, with the standard home-directory defaults.
 - **Modes** — `compact` (default, readable) vs `strict` (includes tool_use / tool_result as text).
 - **Turn limit** — import only the last *N* turns to keep context bounded.
 
@@ -35,13 +36,15 @@ pi install npm:pi-import-claude-history
 # pin a version:  pi install npm:pi-import-claude-history@1.0.1
 ```
 
-**From GitHub** (clones to `~/.pi/agent/git/...`):
+**This fork from GitHub** (clones to your Pi config directory's `git/` folder):
 
 ```bash
-pi install https://github.com/KShivendu/pi-import-claude-history
-# or: pi install git:github.com/KShivendu/pi-import-claude-history
-# pin a tag/commit:  pi install https://github.com/KShivendu/pi-import-claude-history@v1.0.0
+# Remove the upstream npm package first if already installed, to avoid duplicate commands.
+pi remove npm:pi-import-claude-history
+pi install git:github.com/thaske/pi-import-claude-history
 ```
+
+The environment-variable support in this fork is not included in the upstream npm release.
 
 Project-local install (writes `.pi/settings.json`, good for teams):
 
@@ -71,7 +74,7 @@ In Pi: **`/reload`**
 
 | Argument | Meaning |
 |----------|---------|
-| `session-id` | Looks up `~/.claude/projects/*/<session-id>.jsonl`. |
+| `session-id` | Looks up `<claude-config-dir>/projects/*/<session-id>.jsonl` (see below). |
 | `path.jsonl` | Absolute or relative path to a Claude `.jsonl` file. |
 | `--mode compact` | Default: user + assistant **text** turns; collapses noisy repeats. |
 | `--mode strict` | Also surfaces **tool_use** / **tool_result** lines as assistant text. |
@@ -90,13 +93,41 @@ See `examples/sample-claude-session.jsonl` for the minimal Claude NDJSON shape t
 
 ## Where files go
 
+| Environment variable | Default | Used for |
+|----------------------|---------|----------|
+| `PI_CODING_AGENT_DIR` | `~/.pi/agent` | Imported Pi session storage. |
+| `CLAUDE_CONFIG_DIR` | `~/.claude` | Claude session-ID lookup and autocomplete. |
+
+Unset or empty variables use the defaults. A leading `~` expands to your home directory; relative directories resolve from Pi's working directory. Explicit `.jsonl` input paths are independent of `CLAUDE_CONFIG_DIR`.
+
 Imported Pi sessions are written to:
 
 ```text
-~/.pi/agent/sessions/--<cwd-encoded>--/<iso-timestamp>_<pi-session-id>.jsonl
+<pi-config-dir>/sessions/--<cwd-encoded>--/<iso-timestamp>_<pi-session-id>.jsonl
+```
+
+For example:
+
+```bash
+export PI_CODING_AGENT_DIR="$HOME/.pi/agent-work"
+export CLAUDE_CONFIG_DIR="$HOME/.claude-work"
+pi
+# /import-claude <session-id>
+# Reads ~/.claude-work/projects/*/<session-id>.jsonl
+# Writes ~/.pi/agent-work/sessions/--<cwd-encoded>--/...
 ```
 
 The first assistant message is a **bootstrap** summary (source path, mode, turn counts, tool counts, objective snippet).
+
+## Tests
+
+With Node.js 22.18 or newer (native TypeScript support):
+
+```bash
+npm test
+```
+
+Tests run the command and autocomplete in isolated home/project directories without reading or writing your real session history.
 
 ## Demo
 

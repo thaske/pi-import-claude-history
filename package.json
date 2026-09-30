@@ -5,6 +5,9 @@
 	"license": "MIT",
 	"private": false,
 	"type": "module",
+	"scripts": {
+		"test": "node --test test/*.test.mjs"
+	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/KShivendu/pi-import-claude-history.git"
